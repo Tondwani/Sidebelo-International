@@ -24,8 +24,17 @@ node_modules/
 **/pocketbase_*/pocketbase.exe
 **/pocketbase_*/pocketbase
 
-# Force include Pocketbase database and migrations so they are pushed to GitHub
-!pocketbase_*/pb_data/
-!pocketbase_*/pb_data/**
-!pocketbase_*/pb_migrations/
-!pocketbase_*/pb_migrations/**
+# PocketBase runtime data
+**/pocketbase_*/pb_data/
+**/pocketbase_*/pb_data/**
+
+# PocketBase migrations can be version controlled
+!**/pocketbase_*/pb_migrations/
+!**/pocketbase_*/pb_migrations/**
+# OpenNext
+.open-next
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example

@@ -1,0 +1,13 @@
+overrides:
+  hono: 4.12.25
+
+allowBuilds:
+  esbuild: true
+  msw: true
+  workerd: true
+
+minimumReleaseAgeExclude:
+  - '@opennextjs/aws@4.1.2'
+  - '@opennextjs/cloudflare@1.20.4'
+  - miniflare@5.20260826.0-alpha
+  - wrangler@4.127.0
