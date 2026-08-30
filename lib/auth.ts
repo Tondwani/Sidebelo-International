@@ -87,7 +87,8 @@ export async function getSessionUserServer(): Promise<AuthUser | null> {
   // Import and use it only in server contexts
   try {
     const { cookies } = await import('next/headers')
-    const token = cookies().get(cookieName)?.value || ''
+    const cookieStore = await cookies()
+    const token = cookieStore.get(cookieName)?.value || ''
     return await getSessionUser(token)
   } catch (error) {
     // If called from client context, return null
@@ -109,7 +110,8 @@ export async function requireAuth(token: string, allowedRoles?: UserRole[]): Pro
 export async function requireAuthServer(allowedRoles?: UserRole[]): Promise<AuthUser> {
   try {
     const { cookies } = await import('next/headers')
-    const token = cookies().get(cookieName)?.value || ''
+    const cookieStore = await cookies()
+    const token = cookieStore.get(cookieName)?.value || ''
     return await requireAuth(token, allowedRoles)
   } catch (error) {
     throw new Error('Authentication required')
