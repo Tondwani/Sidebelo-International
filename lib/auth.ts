@@ -45,19 +45,29 @@ export async function authenticateSuperuser(email: string, password: string) {
   }
 }
 
+// PocketBase expects the raw JWT in Authorization. Accept both raw and Bearer-prefixed values
+// so callers can forward standard API authorization headers safely.
+export function normalizeSessionToken(token: string | null | undefined): string {
+  const value = token?.trim() || ''
+  return value.replace(/^Bearer\s+/i, '').trim()
+}
+
 // Get session token from a Request object (works in both server and client contexts)
 export function getSessionTokenFromRequest(request: Request): string {
-  return request.headers.get('authorization') || request.headers.get('cookie')?.split(`${cookieName}=`)[1]?.split(';')[0] || ''
+  const authorization = request.headers.get('authorization')
+  if (authorization) return normalizeSessionToken(authorization)
+  return normalizeSessionToken(request.headers.get('cookie')?.split(`${cookieName}=`)[1]?.split(';')[0])
 }
 
 // Get session user using a token (token can come from cookie, header, or client-side storage)
 export async function getSessionUser(token: string): Promise<AuthUser | null> {
-  if (!token || !pocketbaseConfig.isConfigured) return null
+  const normalizedToken = normalizeSessionToken(token)
+  if (!normalizedToken || !pocketbaseConfig.isConfigured) return null
 
   // Try the regular users collection first.
   let response = await fetch(`${pocketbaseConfig.baseUrl}/api/collections/users/auth-refresh`, {
     method: 'POST',
-    headers: { Authorization: token, 'Content-Type': 'application/json' },
+    headers: { Authorization: normalizedToken, 'Content-Type': 'application/json' },
     cache: 'no-store',
   })
 
@@ -69,7 +79,7 @@ export async function getSessionUser(token: string): Promise<AuthUser | null> {
   // Fall back to the _superusers collection.
   response = await fetch(`${pocketbaseConfig.baseUrl}/api/collections/_superusers/auth-refresh`, {
     method: 'POST',
-    headers: { Authorization: token, 'Content-Type': 'application/json' },
+    headers: { Authorization: normalizedToken, 'Content-Type': 'application/json' },
     cache: 'no-store',
   })
 
