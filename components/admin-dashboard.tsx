@@ -17,7 +17,9 @@ export function AdminDashboard() {
   
   const load = async () => { 
     try { 
-      const r = await fetch('/api/admin/operations'); 
+      const r = await fetch('/api/admin/operations', { 
+        credentials: 'include'
+      }); 
       const json = await r.json(); 
       if (!r.ok) { 
         if (r.status === 403) { 
@@ -39,7 +41,12 @@ export function AdminDashboard() {
   const mutate = async (body: any) => { 
     setBusy(body.id || body.action); 
     try { 
-      const r = await fetch('/api/admin/mutations', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); 
+      const r = await fetch('/api/admin/mutations', { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify(body),
+        credentials: 'include'
+      }); 
       if (!r.ok) { 
         if (r.status === 403) { 
           router.push('/login'); 

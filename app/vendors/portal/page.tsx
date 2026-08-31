@@ -1,14 +1,12 @@
 import { Suspense } from 'react'
-import Link from 'next/link'
 import { VendorPortal } from '@/components/vendor-portal'
+import { BackNavigationServer } from '@/components/back-navigation'
 
 export default function VendorPortalPage() {
   return (
     <main className="min-h-screen bg-background">
       <div className="mx-auto max-w-5xl px-6 py-12 md:px-10 md:py-20">
-        <Link href="/" className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          ← SICAF 2026
-        </Link>
+        <BackNavigationServer href="/" label="Back to home" />
         <div className="mt-16 max-w-2xl">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent-foreground">Vendor portal</p>
           <h1 className="mt-4 font-serif text-5xl leading-[0.95] text-primary md:text-7xl">Your stall, in view.</h1>

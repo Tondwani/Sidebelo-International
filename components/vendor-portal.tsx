@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { formatVendorCurrency, vendorCategoryLabel, vendorStatusLabel, type VendorRegistration } from '@/lib/vendor'
+import { BackNavigation } from '@/components/back-navigation'
 
 export function VendorPortal() {
   const router = useRouter()
@@ -19,7 +20,9 @@ export function VendorPortal() {
   useEffect(() => {
     async function fetchSession() {
       try {
-        const response = await fetch('/api/auth/session')
+        const response = await fetch('/api/auth/session', {
+          credentials: 'include'
+        })
         if (response.ok) {
           const data = await response.json()
           setUserEmail(data.user?.email || '')
@@ -57,7 +60,9 @@ export function VendorPortal() {
     setMessage('')
     
     try {
-      const response = await fetch(`/api/vendors/portal?q=${encodeURIComponent(query)}`)
+      const response = await fetch(`/api/vendors/portal?q=${encodeURIComponent(query)}`, {
+        credentials: 'include'
+      })
       const data = await response.json()
       
       if (!response.ok) {
@@ -87,7 +92,8 @@ export function VendorPortal() {
         body: JSON.stringify({
           vendorId: vendor.id,
           amount: vendor.fee_amount || 500
-        })
+        }),
+        credentials: 'include'
       })
       
       const data = await response.json()

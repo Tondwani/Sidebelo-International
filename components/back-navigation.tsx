@@ -17,7 +17,8 @@ function getBackDestination(currentPath: string, userRole?: string | null): stri
   if (currentPath.startsWith('/admin')) {
     return '/admin/dashboard'
   } else if (currentPath.startsWith('/security')) {
-    return '/security/scanner'
+    // Security scanner goes back to home (security users typically go to scanner directly)
+    return '/'
   } else if (currentPath.startsWith('/vendors')) {
     return '/vendors/portal'
   } else if (currentPath.startsWith('/tickets')) {
@@ -37,7 +38,7 @@ function getBackDestination(currentPath: string, userRole?: string | null): stri
   } else if (currentPath === '/login') {
     return '/'
   }
-  
+
   // Default fallback
   return '/'
 }
@@ -51,7 +52,9 @@ export function BackNavigation({ className = '', fallbackHref = '/', label = 'Ba
     // Function to get user role from session
     async function fetchUserRole() {
       try {
-        const response = await fetch('/api/auth/session')
+        const response = await fetch('/api/auth/session', {
+          credentials: 'include'
+        })
         if (response.ok) {
           const data = await response.json()
           setUserRole(data.user?.role || null)

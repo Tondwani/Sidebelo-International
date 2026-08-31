@@ -44,11 +44,19 @@ export async function POST(request: Request) {
     const response = NextResponse.json({ user: session.record })
     response.cookies.set(cookieName, session.token, { 
       httpOnly: true, 
-      secure: process.env.NODE_ENV === 'production', 
+      secure: false, // Set to false for development
       sameSite: 'lax', 
       path: '/', 
       maxAge: 60 * 60 * 8 
     })
+    
+    console.log('Login successful - Cookie set:', {
+      cookieName: cookieName,
+      tokenLength: session.token.length,
+      userEmail: session.record.email,
+      userRole: session.record.role
+    })
+    
     return response
   } catch (error) { 
     console.error('Login error:', error)

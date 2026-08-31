@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { CheckCircle2, LoaderCircle, ScanLine, ShieldAlert, AlertTriangle, XCircle } from 'lucide-react'
 import type { TicketRecord } from '@/lib/pocketbase'
+import { BackNavigation } from '@/components/back-navigation'
 
 type ScannerState = 'idle' | 'valid' | 'already_used' | 'cancelled' | 'invalid' | 'success'
 
@@ -27,6 +28,7 @@ export function SecurityScanner() {
       const response = await fetch('/api/security/check-in', { 
         method: checkIn ? 'PATCH' : 'GET', 
         headers: { 'Content-Type': 'application/json' }, 
+        credentials: 'include',
         ...(checkIn ? { body: JSON.stringify({ qr_hash: hash }) } : {}) 
       }); 
       const data = await response.json(); 
@@ -108,6 +110,7 @@ export function SecurityScanner() {
       <div className="mx-auto max-w-3xl">
         <div className="flex items-center justify-between border-b border-primary-foreground/20 pb-6">
           <div>
+            <BackNavigation fallbackHref="/" label="Back to home" className="text-primary-foreground hover:opacity-70 mb-4" />
             <p className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-accent">SICAF 2026 · Gate Operations</p>
             <h1 className="mt-3 font-serif text-4xl">Security check-in</h1>
           </div>

@@ -17,7 +17,8 @@ export function BookingForm({ event }: { event: EventRecord }) {
       const response = await fetch('/api/paystack/initialize', { 
         method: 'POST', 
         headers: { 'Content-Type': 'application/json' }, 
-        body: JSON.stringify({ eventId: event.id, attendeeEmail: email }) 
+        body: JSON.stringify({ eventId: event.id, attendeeEmail: email }),
+        credentials: 'include'
       })
       const result = await response.json()
       if (!response.ok) throw new Error(result.error || 'Payment initialization failed.')

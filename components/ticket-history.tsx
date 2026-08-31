@@ -40,7 +40,9 @@ export function TicketHistory({ userEmail }: TicketHistoryProps) {
         return
       }
 
-      const response = await fetch(`/api/tickets/my-tickets?email=${encodeURIComponent(email)}`)
+      const response = await fetch(`/api/tickets/my-tickets?email=${encodeURIComponent(email)}`, {
+        credentials: 'include'
+      })
       const data = await response.json()
 
       if (!response.ok) {

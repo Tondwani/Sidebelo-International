@@ -12,7 +12,7 @@ export function VendorRegistrationForm() {
   const update = (key: string, value: string) => setForm((current) => ({ ...current, [key]: value }))
   async function submit(event: React.FormEvent) {
     event.preventDefault(); setState({ loading: true })
-    try { const response = await fetch('/api/vendors/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) }); const data = await response.json(); if (!response.ok) throw new Error(data.error); setState({ reference: data.record.reference }) } catch (error) { setState({ error: error instanceof Error ? error.message : 'Unable to submit application.' }) }
+    try { const response = await fetch('/api/vendors/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form), credentials: 'include' }); const data = await response.json(); if (!response.ok) throw new Error(data.error); setState({ reference: data.record.reference }) } catch (error) { setState({ error: error instanceof Error ? error.message : 'Unable to submit application.' }) }
   }
   if (state.reference) return <div className="border border-accent/50 bg-accent/10 p-8"><p className="font-mono text-xs uppercase tracking-[0.18em] text-accent-foreground">Application received</p><h2 className="mt-3 font-serif text-3xl text-primary">Your reference is {state.reference}</h2><p className="mt-3 text-muted-foreground">Keep this reference safe. We&apos;ll review your application and update your stall fee status.</p><Link className="mt-6 inline-flex bg-primary px-5 py-3 text-sm font-bold text-primary-foreground" href="/vendors/portal">Track application</Link></div>
   return <form onSubmit={submit} className="grid gap-5 sm:grid-cols-2">
